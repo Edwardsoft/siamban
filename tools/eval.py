@@ -15,32 +15,33 @@ from toolkit.evaluation import OPEBenchmark, AccuracyRobustnessBenchmark, \
         EAOBenchmark, F1Benchmark
 
 parser = argparse.ArgumentParser(description='tracking evaluation')
-parser.add_argument('--tracker_path', '-p', type=str,
+parser.add_argument('--tracker_path', '-p', default='../results', type=str,
                     help='tracker result path')
-parser.add_argument('--dataset', '-d', type=str,
+parser.add_argument('--dataset', '-d', default='VOT2016', type=str,
                     help='dataset name')
 parser.add_argument('--num', '-n', default=1, type=int,
                     help='number of thread to eval')
-parser.add_argument('--tracker_prefix', '-t', default='',
+parser.add_argument('--tracker_prefix', '-t', default='model',
                     type=str, help='tracker name')
 parser.add_argument('--show_video_level', '-s', dest='show_video_level',
                     action='store_true')
-parser.set_defaults(show_video_level=False)
+parser.set_defaults(show_video_level=True)
 args = parser.parse_args()
 
 
 def main():
     tracker_dir = os.path.join(args.tracker_path, args.dataset)
-    trackers = glob(os.path.join(args.tracker_path,
-                                 args.dataset,
-                                 args.tracker_prefix+'*'))
+    #trackers = glob(os.path.join(args.tracker_path,
+    #                            args.dataset,
+    #                             args.tracker_prefix+'*'))
+    trackers = ["..\experiments\siamban_r50_l234\model"]
     trackers = [x.split('/')[-1] for x in trackers]
 
     assert len(trackers) > 0
     args.num = min(args.num, len(trackers))
 
     root = os.path.realpath(os.path.join(os.path.dirname(__file__),
-                            '../testing_dataset'))
+                            r'C:\Users\639\PycharmProjects\siamban\testing_dataset'))
     root = os.path.join(root, args.dataset)
     if 'OTB' in args.dataset:
         dataset = OTBDataset(args.dataset, root)

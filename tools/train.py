@@ -32,18 +32,20 @@ from siamban.models.model_builder import ModelBuilder
 from siamban.datasets.dataset import BANDataset
 from siamban.core.config import cfg
 
-
+#配置
 logger = logging.getLogger('global')
 parser = argparse.ArgumentParser(description='siamese tracking')
 parser.add_argument('--cfg', type=str, default='config.yaml',
                     help='configuration of tracking')
+#Pytorch设置随机数种子，使训练结果可复现。
 parser.add_argument('--seed', type=int, default=123456,
                     help='random seed')
+
 parser.add_argument('--local_rank', type=int, default=0,
                     help='compulsory for pytorch launcer')
 args = parser.parse_args()
 
-
+#随机数种子设定，默认为0，也可以自己设定
 def seed_torch(seed=0):
     random.seed(seed)
     os.environ['PYTHONHASHSEED'] = str(seed)

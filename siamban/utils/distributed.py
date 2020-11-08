@@ -17,6 +17,7 @@ from siamban.utils.log_helper import log_once
 
 logger = logging.getLogger('global')
 
+#此py似乎是用来做分布式运算的
 
 def average_reduce(v):
     if get_world_size() == 1:
@@ -81,7 +82,9 @@ def _dist_init():
         proc_id: rank
     '''
     rank = int(os.environ['RANK'])
+    #gpu数量
     num_gpus = torch.cuda.device_count()
+
     torch.cuda.set_device(rank % num_gpus)
     dist.init_process_group(backend='nccl')
     world_size = dist.get_world_size()

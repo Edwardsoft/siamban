@@ -12,27 +12,36 @@ import cv2
 import torch
 import numpy as np
 
+
 from siamban.core.config import cfg
 from siamban.models.model_builder import ModelBuilder
 from siamban.tracker.tracker_builder import build_tracker
 from siamban.utils.bbox import get_axis_aligned_bbox
 from siamban.utils.model_load import load_pretrain
 from toolkit.datasets import DatasetFactory
+import pyximport
+pyximport.install()
 from toolkit.utils.region import vot_overlap, vot_float2str
 
-
+#名字
 parser = argparse.ArgumentParser(description='siamese tracking')
-parser.add_argument('--dataset', type=str,
+#数据库
+parser.add_argument('--dataset', default='VOT2016', type=str,
         help='datasets')
-parser.add_argument('--config', default='', type=str,
+#配置文件
+parser.add_argument('--config', default='..\experiments\siamban_r50_l234\config.yaml', type=str,
         help='config file')
-parser.add_argument('--snapshot', default='', type=str,
+#模型
+parser.add_argument('--snapshot', default='..\experiments\siamban_r50_l234\model.pth', type=str,
         help='snapshot of models to eval')
+#视频
 parser.add_argument('--video', default='', type=str,
         help='eval one special video')
-parser.add_argument('--vis', action='store_true',
-        help='whether visualzie result')
-parser.add_argument('--gpu_id', default='not_set', type=str, 
+#结果是否可视化
+parser.add_argument('--vis', dest='vis', action='store_true',
+        help='whether visualzie result', default = 'True')
+#使用gpu的id
+parser.add_argument('--gpu_id', default='0', type=str,
         help="gpu id")
 
 args = parser.parse_args()
@@ -40,14 +49,16 @@ args = parser.parse_args()
 if args.gpu_id != 'not_set':
     os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_id
 
+#线程数
 torch.set_num_threads(1)
 
 def main():
     # load config
     cfg.merge_from_file(args.config)
-
+    # 当前目录
     cur_dir = os.path.dirname(os.path.realpath(__file__))
-    dataset_root = os.path.join(cur_dir, '../testing_dataset', args.dataset)
+    # 数据集的路径
+    dataset_root = os.path.join(cur_dir, r'C:\Users\639\PycharmProjects\siamban\testing_dataset', args.dataset)
 
     # create model
     model = ModelBuilder()

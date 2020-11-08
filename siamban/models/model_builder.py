@@ -19,11 +19,11 @@ class ModelBuilder(nn.Module):
     def __init__(self):
         super(ModelBuilder, self).__init__()
 
-        # build backbone
+        # build backbone  骨干网络
         self.backbone = get_backbone(cfg.BACKBONE.TYPE,
                                      **cfg.BACKBONE.KWARGS)
 
-        # build adjust layer
+        # build adjust layer  调整层
         if cfg.ADJUST.ADJUST:
             self.neck = get_neck(cfg.ADJUST.TYPE,
                                  **cfg.ADJUST.KWARGS)
